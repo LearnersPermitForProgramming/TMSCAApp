@@ -27,7 +27,6 @@ public class ScienceFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.science, container, false);
         getActivity().setTitle("Science");
-        System.out.print("");
         return rootView;
     }
 }

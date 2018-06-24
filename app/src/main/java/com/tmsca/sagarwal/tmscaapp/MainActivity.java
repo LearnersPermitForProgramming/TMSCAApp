@@ -81,11 +81,6 @@ public class MainActivity extends AppCompatActivity
         Score scoreClass = new Score();
 
 
-        int score = 5;
-        scoreClass.setScore(score);
-        Map newPost = new HashMap();
-        newPost.put("score", score);
-        myRef.setValue(scoreClass);
 // ..
 
 

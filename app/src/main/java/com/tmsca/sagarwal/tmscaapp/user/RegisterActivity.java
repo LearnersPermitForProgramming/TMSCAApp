@@ -95,6 +95,7 @@ public class RegisterActivity extends AppCompatActivity{
                                                 progressDialog.dismiss();
 
                                                 Intent mainIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                                                mainIntent.putExtra("username", name);
                                                 startActivity(mainIntent);
                                                 finish();
                                                 Toast.makeText(RegisterActivity.this, "User created!", Toast.LENGTH_SHORT).show();
