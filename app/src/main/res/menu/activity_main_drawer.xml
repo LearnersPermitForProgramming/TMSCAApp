@@ -4,23 +4,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
-
+<group android:checkableBehavior="single">
     <item android:id="@+id/item3"
-        android:title="Study"
+        android:title="Study/Notes"
         app:showAsAction="never">
 
         <menu>
-            <item android:id="@+id/math"
-                android:title="Math"
-                />
-            <item android:id="@+id/science"
-                android:title="Science"
-                />
+            <group android:checkableBehavior="single">
+
+                <item android:id="@+id/math"
+                    android:title="Math"
+                    />
+                <item android:id="@+id/science"
+                    android:title="Science"
+                    />
+
+            </group>
+
+            <item android:id="@+id/notes"
+                android:title="Notes"/>
         </menu>
     </item>
+</group>
+
     <group>
         <item android:id="@+id/signout"
             android:title="Sign Out"/>
+    </group>
+    <group>
+        <item android:title="About"
+            android:id="@+id/about"/>
+        <item android:id="@+id/report"
+            android:title="Report a Bug"/>
     </group>
 
 </menu>

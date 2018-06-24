@@ -1,22 +1,17 @@
-package com.tmsca.sagarwal.tmscaapp;
+package com.tmsca.sagarwal.tmscaapp.user;
 
-import android.app.FragmentManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.PopupMenu;
-import android.util.Log;
-import android.view.MenuInflater;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -32,97 +27,100 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.tmsca.sagarwal.tmscaapp.Fragments.HomeFragment;
-import com.tmsca.sagarwal.tmscaapp.Fragments.MathFragment;
-import com.tmsca.sagarwal.tmscaapp.Fragments.ScienceFragment;
+import com.tmsca.sagarwal.tmscaapp.MainActivity;
+import com.tmsca.sagarwal.tmscaapp.R;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class LoginActivity extends AppCompatActivity{
 
 
-    Button button;
-    View v;
-    ImageView imageView;
+    TextInputLayout inputEmail, inputPass;
+    private Button btnLogIn;
+
+    private FirebaseAuth fAuth;
     private static final int RC_SIGN_IN = 0;
     private FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference myRef;
 
-    // Called when activity is first created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_login);
+
+        inputEmail = (TextInputLayout) findViewById(R.id.input_log_email);
+        inputPass = (TextInputLayout) findViewById(R.id.input_log_pass);
+        btnLogIn = (Button) findViewById(R.id.btn_log);
+
+        fAuth = FirebaseAuth.getInstance();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-
-        String uid = mAuth.getCurrentUser().getUid();
-        myRef = mFirebaseDatabase.getReference().child("Users").child(uid);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        Score scoreClass = new Score();
 
+        btnLogIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        int score = 5;
-        scoreClass.setScore(score);
-        Map newPost = new HashMap();
-        newPost.put("score", score);
-        myRef.setValue(scoreClass);
-// ..
+                String lEmail = inputEmail.getEditText().getText().toString().trim();
+                String lPass = inputPass.getEditText().getText().toString().trim();
 
+                if (!TextUtils.isEmpty(lEmail) && !TextUtils.isEmpty(lPass)) {
+                    logIn(lEmail, lPass);
+                }
 
-
-
-
-
-        if (mAuth.getCurrentUser() != null) {
-            Log.d("AUTH", "Hi this is working 1");
-            FragmentManager fm = getFragmentManager();
-            fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
-        } else {
-
-        }
-
+            }
+        });
 
     }
 
+    private void logIn(String email, String password){
 
-    public void setActionBarTitle(String title){
-        getActionBar().setTitle(title);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Logging in, please wait...");
+        progressDialog.show();
+
+        fAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        progressDialog.dismiss();
+
+                        if (task.isSuccessful()) {
+
+                            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(mainIntent);
+                            finish();
+
+                            Toast.makeText(LoginActivity.this, "Sign in successful", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "ERROR: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+
     }
-
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
 
-        if (mAuth.getCurrentUser() != null) {
-            Log.d("AUTH", "Hi this is working 2");
-
-            FragmentManager fm = getFragmentManager();
-            fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
-        } else {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
         }
-    }
 
+        return true;
+    }
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -187,56 +185,5 @@ public class MainActivity extends AppCompatActivity
     public void signOut() {
         FirebaseAuth.getInstance().signOut();
     }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-
-        }
-    }
-
-
-
-
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        // This is where we assign functions for the navigation items.
-        FragmentManager fm = getFragmentManager();
-        if (id == R.id.signout) {
-            signOut();
-            Intent i = new Intent(this, StartActivity.class);
-            startActivity(i);
-        } else if (id == R.id.science) {
-
-            fm.beginTransaction().replace(R.id.content_frame, new ScienceFragment()).commit();
-
-        } else if (id == R.id.math) {
-            fm.beginTransaction().replace(R.id.content_frame, new MathFragment()).commit();
-        }else if (id == R.id.notes){
-            Intent i = new Intent(this, NotesActivity.class);
-            startActivity(i);
-        }
-
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private void showPopup(View v) {
-        PopupMenu popup = new PopupMenu(this, v);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.popup_menu, popup.getMenu());
-        popup.show();
-    }
-
-
 
 }
