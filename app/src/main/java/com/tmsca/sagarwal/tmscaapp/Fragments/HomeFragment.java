@@ -35,13 +35,19 @@ public class HomeFragment extends Fragment{
 
         final FirebaseAuth fAuth = FirebaseAuth.getInstance();
         DatabaseReference fNotesDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(fAuth.getCurrentUser().getUid());
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("basic").addListenerForSingleValueEvent(new ValueEventListener() {
+        final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("basic").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String name = dataSnapshot.child("name").getValue(String.class);
                 System.out.println(name);
-                welcome.setText(name + ", welcome to the Math and Science Team Website");
+                if(name == null){
+                    welcome.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + ", welcome to the Pearson Math and Science Team!");
+                    name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("basic").child(name);
+                }else{
+                    welcome.setText(name + ", welcome to the Math and Science Team!");
+                }
             }
 
             @Override

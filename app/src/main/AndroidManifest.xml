@@ -31,7 +31,7 @@
             android:label="Notes"/>
         <activity android:name=".SignInActivity"/>
         <activity android:name=".NewNoteActivity"
-            android:label="New Note"/>
+            android:label="New/Update Note"/>
         <activity android:name=".user.RegisterActivity"
             android:label="Register"/>
     </application>

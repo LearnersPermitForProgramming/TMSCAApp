@@ -30,7 +30,7 @@ public class RegisterActivity extends AppCompatActivity{
     private DatabaseReference fUsersDatabase;
 
     private ProgressDialog progressDialog;
-
+    private Intent i;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,5 +132,11 @@ public class RegisterActivity extends AppCompatActivity{
         }
 
         return true;
+    }
+
+    public void loginClick(View view){
+        i = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(i);
+        finish();
     }
 }

@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
             FragmentManager fm = getFragmentManager();
             fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
         } else {
-
+            System.out.println("Not logged in");
         }
 
 

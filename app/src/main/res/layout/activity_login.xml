@@ -45,6 +45,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:text="Log in" />
-
+    <com.google.android.gms.common.SignInButton
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:id="@+id/signin"
+        android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>
 
 </LinearLayout>

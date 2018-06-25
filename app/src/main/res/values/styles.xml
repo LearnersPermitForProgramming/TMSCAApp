@@ -12,6 +12,9 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="button_login" parent="Theme.AppCompat">
+        <item name="android:colorButtonNormal">@color/colorPrimary</item>
+    </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
