@@ -6,6 +6,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,15 @@ public class HomeFragment extends Fragment{
         welcome = (TextView) rootView.findViewById(R.id.textView4);
 
 
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            Log.d("AUTH", "User is Signed in");
+        }else if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            Log.d("AUTH", "The User is not logged in using FIREBASE AUTH");
+
+        }else{
+            Log.d("AUTH", "There is really something going on that is wrong");
+        }
+
         final FirebaseAuth fAuth = FirebaseAuth.getInstance();
         DatabaseReference fNotesDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(fAuth.getCurrentUser().getUid());
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -41,6 +51,7 @@ public class HomeFragment extends Fragment{
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String name = dataSnapshot.child("name").getValue(String.class);
                 System.out.println(name);
+                //if(name == null) happens when the user logs in with their google account. This is fixed in the latest update.
                 if(name == null){
                     welcome.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + ", welcome to the Pearson Math and Science Team!");
                     name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();

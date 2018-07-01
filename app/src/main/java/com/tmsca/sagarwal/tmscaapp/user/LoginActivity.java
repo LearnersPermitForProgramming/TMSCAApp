@@ -55,16 +55,22 @@ public class LoginActivity extends AppCompatActivity{
         fAuth = FirebaseAuth.getInstance();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        // Setting the instance for Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        if(fAuth.getCurrentUser() != null){
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(i);
+        }else{
+            signIn();
+            Log.d("GOOGLE AUTH", "fAuth.getCurrentUser() == null");
+        }
         SignInButton sb = findViewById(R.id.signin);
         sb.setOnClickListener(
                 new View.OnClickListener() {
@@ -75,8 +81,11 @@ public class LoginActivity extends AppCompatActivity{
                             startActivity(i);
                         }else{
                             signIn();
+                            Log.d("GOOGLE AUTH", "fAuth.getCurrentUser() == null");
                         }
                     }
+
+
                 }
         );
         btnLogIn.setOnClickListener(new View.OnClickListener() {
