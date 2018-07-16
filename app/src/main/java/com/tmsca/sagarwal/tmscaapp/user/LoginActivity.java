@@ -64,18 +64,14 @@ public class LoginActivity extends AppCompatActivity{
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        if(fAuth.getCurrentUser() != null){
-            Intent i = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(i);
-        }else{
-            signIn();
-            Log.d("GOOGLE AUTH", "fAuth.getCurrentUser() == null");
-        }
+        mGoogleSignInClient.getSignInIntent();
+
         SignInButton sb = findViewById(R.id.signin);
         sb.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        System.out.print("Test to see if it works");
                         if(fAuth.getCurrentUser() != null){
                             Intent i = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(i);
@@ -103,6 +99,8 @@ public class LoginActivity extends AppCompatActivity{
         });
 
     }
+
+
 
     private void logIn(String email, String password){
 

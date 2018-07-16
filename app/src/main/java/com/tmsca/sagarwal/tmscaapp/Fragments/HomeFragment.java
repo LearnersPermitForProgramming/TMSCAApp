@@ -24,9 +24,10 @@ import com.squareup.picasso.Picasso;
 import com.tmsca.sagarwal.tmscaapp.R;
 
 public class HomeFragment extends Fragment{
-
+    // Declaring the variables - going to convert to Kotlin soon.
     TextView welcome;
-    String name;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
