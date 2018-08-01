@@ -14,10 +14,15 @@ import android.widget.Toast;
 
 import com.tmsca.sagarwal.tmscaapp.R;
 
+//This is for feedback and reporting bugs.
+
 public class FeedbackFramgent extends Fragment{
 
     Button sendBug;
     EditText bugContent;
+
+
+    // When the view gets created
 
     @Nullable
     @Override

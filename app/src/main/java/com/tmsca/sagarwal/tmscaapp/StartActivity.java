@@ -42,6 +42,11 @@ public class StartActivity extends AppCompatActivity{
             }
         });
 
+        if(fAuth.getCurrentUser() != null){
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+        }
+
     }
 
     private void register(){
