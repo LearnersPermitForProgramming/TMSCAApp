@@ -101,7 +101,14 @@ public class LoginActivity extends AppCompatActivity{
 
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(fAuth.getCurrentUser() != null){
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(i);
+        }
+    }
 
     private void logIn(String email, String password){
 

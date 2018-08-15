@@ -1,9 +1,10 @@
 package com.tmsca.sagarwal.tmscaapp;
 
-import android.app.FragmentManager;
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.MenuInflater;
@@ -32,6 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tmsca.sagarwal.tmscaapp.Fragments.AboutFragment;
 import com.tmsca.sagarwal.tmscaapp.Fragments.HomeFragment;
 import com.tmsca.sagarwal.tmscaapp.Fragments.MathFragment;
 import com.tmsca.sagarwal.tmscaapp.Fragments.ScienceFragment;
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity
 
         if (mAuth.getCurrentUser() != null) {
             Log.d("AUTH", "Hi this is working 1");
-            FragmentManager fm = getFragmentManager();
+            FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
         } else {
             System.out.println("Not logged in");
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         if (mAuth.getCurrentUser() != null) {
             Log.d("AUTH", "Hi this is working 2");
 
-            FragmentManager fm = getFragmentManager();
+            FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
         } else {
         }
@@ -204,7 +206,8 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         // This is where we assign functions for the navigation items.
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fm2 = getSupportFragmentManager().beginTransaction();
         if (id == R.id.signout) {
             signOut();
             Intent i = new Intent(this, StartActivity.class);
@@ -218,6 +221,12 @@ public class MainActivity extends AppCompatActivity
         }else if (id == R.id.notes){
             Intent i = new Intent(this, NotesActivity.class);
             startActivity(i);
+        }else if(id == R.id.about){
+
+            fm2.replace(R.id.content_frame, new AboutFragment());
+            fm2.addToBackStack(null);
+            fm2.commit();
+
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -14,13 +14,14 @@ import android.widget.Toast;
 
 import com.tmsca.sagarwal.tmscaapp.R;
 
+import java.util.ArrayList;
+
 //This is for feedback and reporting bugs.
 
 public class FeedbackFramgent extends Fragment{
 
     Button sendBug;
     EditText bugContent;
-
 
     // When the view gets created
 
@@ -31,6 +32,7 @@ public class FeedbackFramgent extends Fragment{
         sendBug = rootView.findViewById(R.id.sendEmail);
         bugContent = rootView.findViewById(R.id.bugContent);
 
+
         sendBug.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,8 +42,12 @@ public class FeedbackFramgent extends Fragment{
                 if(bug.equals("")){
                     Toast.makeText(getActivity(), "Please put some content inside of the bug report box.", Toast.LENGTH_SHORT).show();
                 }else{
+                    String send = "tmscabugreport@gmail.com";
+                    String[] split = send.split(",");
+
+
                     Intent email = new Intent(Intent.ACTION_SEND);
-                    email.putExtra(Intent.EXTRA_EMAIL, "tmscabugreport@gmail.com");
+                    email.putExtra(Intent.EXTRA_EMAIL, split);
                     email.putExtra(Intent.EXTRA_TEXT, bug);
                     email.setType("message/rfc822");
                     startActivity(Intent.createChooser(email, "Choose an app to send this email with."));

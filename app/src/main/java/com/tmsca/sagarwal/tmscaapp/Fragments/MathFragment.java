@@ -1,7 +1,7 @@
 package com.tmsca.sagarwal.tmscaapp.Fragments;
 
 import android.app.ActionBar;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;

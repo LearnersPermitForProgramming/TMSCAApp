@@ -1,6 +1,6 @@
 package com.tmsca.sagarwal.tmscaapp.Fragments;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
