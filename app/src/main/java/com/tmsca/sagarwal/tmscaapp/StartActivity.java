@@ -45,6 +45,7 @@ public class StartActivity extends AppCompatActivity{
         if(fAuth.getCurrentUser() != null){
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
+            finish();
         }
 
     }
@@ -52,11 +53,13 @@ public class StartActivity extends AppCompatActivity{
     private void register(){
         Intent regIntent = new Intent(StartActivity.this, RegisterActivity.class);
         startActivity(regIntent);
+        finish();
     }
 
     private void login(){
         Intent logIntent = new Intent(StartActivity.this, LoginActivity.class);
         startActivity(logIntent);
+        finish();
     }
 
     private void updateUI(){

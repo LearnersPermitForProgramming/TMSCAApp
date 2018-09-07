@@ -7,8 +7,8 @@ android {
         applicationId "com.tmsca.sagarwal.tmscaapp"
         minSdkVersion 17
         targetSdkVersion 27
-        versionCode 4
-        versionName "1.4"
+        versionCode 8
+        versionName "2.3"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

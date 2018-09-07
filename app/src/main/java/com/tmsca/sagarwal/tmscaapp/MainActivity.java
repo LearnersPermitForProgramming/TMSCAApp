@@ -1,5 +1,6 @@
 package com.tmsca.sagarwal.tmscaapp;
 
+import android.app.ProgressDialog;
 import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -33,41 +35,39 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.tmsca.sagarwal.tmscaapp.Fragments.AboutFragment;
+import com.tmsca.sagarwal.tmscaapp.Fragments.OtherFragment;
 import com.tmsca.sagarwal.tmscaapp.Fragments.HomeFragment;
 import com.tmsca.sagarwal.tmscaapp.Fragments.MathFragment;
 import com.tmsca.sagarwal.tmscaapp.Fragments.ScienceFragment;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
     Button button;
-    View v;
     ImageView imageView;
     private static final int RC_SIGN_IN = 0;
     private FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
-
-    // Called when activity is first created
+    private ProgressDialog mProgressDialog;
+    FragmentManager fm;
+    // onCreate method (Does exactly what it sounds like in a programmer mindset)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        //Firebase Setup
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
 
         String uid = mAuth.getCurrentUser().getUid();
         myRef = mFirebaseDatabase.getReference().child("Users").child(uid);
 
+        //Navigation Drawer stuff
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -79,24 +79,17 @@ public class MainActivity extends AppCompatActivity
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         Score scoreClass = new Score();
 
-
+        fm = getSupportFragmentManager();
 // ..
 
+        fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
 
 
 
 
 
-        if (mAuth.getCurrentUser() != null) {
-            Log.d("AUTH", "Hi this is working 1");
-            FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
-        } else {
-            System.out.println("Not logged in");
-        }
 
 
     }
@@ -107,18 +100,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        if (mAuth.getCurrentUser() != null) {
-            Log.d("AUTH", "Hi this is working 2");
-
-            FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
-        } else {
-        }
-    }
 
 
     private void signIn() {
@@ -137,6 +119,7 @@ public class MainActivity extends AppCompatActivity
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
+                showProgressDialog();
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w("AUTH", "Google sign in failed", e);
@@ -155,7 +138,7 @@ public class MainActivity extends AppCompatActivity
             Log.w("AUTH", "signInResult:failed code=" + e.getStatusCode());
         }
     }
-
+    // firebaseNumberWithGoogle function ( When the dude clicks the button initiate the sign in stuff)
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d("AUTH", "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -198,8 +181,6 @@ public class MainActivity extends AppCompatActivity
 
 
 
-
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -222,11 +203,10 @@ public class MainActivity extends AppCompatActivity
             Intent i = new Intent(this, NotesActivity.class);
             startActivity(i);
         }else if(id == R.id.about){
+            fm.beginTransaction().replace(R.id.content_frame, new OtherFragment()).commit();
 
-            fm2.replace(R.id.content_frame, new AboutFragment());
-            fm2.addToBackStack(null);
-            fm2.commit();
-
+        }else if(id == R.id.home){
+            fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -234,11 +214,28 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+
+
     private void showPopup(View v) {
         PopupMenu popup = new PopupMenu(this, v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.popup_menu, popup.getMenu());
         popup.show();
+    }
+
+    private void showProgressDialog(){
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage("Logging in, please wait...");
+            mProgressDialog.setIndeterminate(true);
+        }
+
+        mProgressDialog.show();
+    }
+    private void hideProgressDialog(){
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.hide();
+        }
     }
 
 

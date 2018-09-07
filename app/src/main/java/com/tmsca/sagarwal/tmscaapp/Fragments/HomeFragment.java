@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,17 +33,11 @@ public class HomeFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.home, container, false);
+
+        //Initializing the variables
         welcome = (TextView) rootView.findViewById(R.id.textView4);
 
-
-        if(FirebaseAuth.getInstance().getCurrentUser() != null){
-            Log.d("AUTH", "User is Signed in");
-        }else if(FirebaseAuth.getInstance().getCurrentUser() == null){
-            Log.d("AUTH", "The User is not logged in using FIREBASE AUTH");
-
-        }else{
-            Log.d("AUTH", "There is really something going on that is wrong");
-        }
+        getActivity().setTitle("Pearson Math and Science Team");
 
         final FirebaseAuth fAuth = FirebaseAuth.getInstance();
         DatabaseReference fNotesDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(fAuth.getCurrentUser().getUid());
@@ -64,6 +59,12 @@ public class HomeFragment extends Fragment{
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+
+
+
+
+
 
             }
         });

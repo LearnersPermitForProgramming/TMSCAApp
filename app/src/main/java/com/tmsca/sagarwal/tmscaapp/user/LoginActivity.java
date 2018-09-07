@@ -73,13 +73,9 @@ public class LoginActivity extends AppCompatActivity{
                     @Override
                     public void onClick(View view) {
                         System.out.print("Test to see if it works");
-                        if(fAuth.getCurrentUser() != null){
-                            Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(i);
-                        }else{
                             signIn();
                             Log.d("GOOGLE AUTH", "fAuth.getCurrentUser() == null");
-                        }
+
                     }
 
 
@@ -99,15 +95,6 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(fAuth.getCurrentUser() != null){
-            Intent i = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(i);
-        }
     }
 
     private void logIn(String email, String password){
@@ -153,6 +140,7 @@ public class LoginActivity extends AppCompatActivity{
     }
 
     private void signIn() {
+
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -164,6 +152,9 @@ public class LoginActivity extends AppCompatActivity{
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Logging in, please wait...");
+            progressDialog.show();
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
@@ -198,8 +189,9 @@ public class LoginActivity extends AppCompatActivity{
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("AUTH", "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            System.out.println(user.getUid() + "Hi Shobhit");
+                            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(i);
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("AUTH", "signInWithCredential:failure", task.getException());

@@ -5,6 +5,8 @@
     tools:showIn="navigation_view">
 
 <group android:checkableBehavior="single">
+
+
     <item android:id="@+id/item3"
         android:title="Study/Notes"
         app:showAsAction="never">
@@ -12,17 +14,25 @@
         <menu>
             <group android:checkableBehavior="single">
 
+
+                <item android:icon="@drawable/home"
+                    android:title="Home"
+                    android:id="@+id/home"/>
+
                 <item android:id="@+id/math"
                     android:title="Math"
+                    android:icon="@drawable/math"
                     />
                 <item android:id="@+id/science"
                     android:title="Science"
+                    android:icon="@drawable/science"
                     />
 
             </group>
 
             <item android:id="@+id/notes"
-                android:title="Notes"/>
+                android:title="Notes"
+                android:icon="@drawable/notes"/>
         </menu>
     </item>
 </group>

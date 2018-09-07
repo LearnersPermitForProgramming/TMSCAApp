@@ -25,7 +25,7 @@ public class SplashScreen extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
         splash = findViewById(R.id.splash);
-        splashAnimation = AnimationUtils.loadAnimation(this, R.anim.fui_slide_in_right);
+        splashAnimation = AnimationUtils.loadAnimation(this, R.anim.fui_slide_out_left);
         splashAnimation.start();
         splash.setAnimation(splashAnimation);
         progressBar = findViewById(R.id.progressBar);
