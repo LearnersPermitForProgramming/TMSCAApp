@@ -35,10 +35,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.tmsca.sagarwal.tmscaapp.Fragments.OtherFragment;
-import com.tmsca.sagarwal.tmscaapp.Fragments.HomeFragment;
-import com.tmsca.sagarwal.tmscaapp.Fragments.MathFragment;
-import com.tmsca.sagarwal.tmscaapp.Fragments.ScienceFragment;
+import com.tmsca.sagarwal.tmscaapp.Fragments.*;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -53,6 +50,7 @@ public class MainActivity extends AppCompatActivity
     private DatabaseReference myRef;
     private ProgressDialog mProgressDialog;
     FragmentManager fm;
+
     // onCreate method (Does exactly what it sounds like in a programmer mindset)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,20 +85,12 @@ public class MainActivity extends AppCompatActivity
         fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
 
 
-
-
-
-
-
     }
 
 
-    public void setActionBarTitle(String title){
+    public void setActionBarTitle(String title) {
         getActionBar().setTitle(title);
     }
-
-
-
 
 
     private void signIn() {
@@ -108,25 +98,6 @@ public class MainActivity extends AppCompatActivity
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-                showProgressDialog();
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w("AUTH", "Google sign in failed", e);
-                // ...
-            }
-        }
-    }
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
@@ -138,6 +109,7 @@ public class MainActivity extends AppCompatActivity
             Log.w("AUTH", "signInResult:failed code=" + e.getStatusCode());
         }
     }
+
     // firebaseNumberWithGoogle function ( When the dude clicks the button initiate the sign in stuff)
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d("AUTH", "firebaseAuthWithGoogle:" + acct.getId());
@@ -180,7 +152,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -199,14 +170,16 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.math) {
             fm.beginTransaction().replace(R.id.content_frame, new MathFragment()).commit();
-        }else if (id == R.id.notes){
+        } else if (id == R.id.notes) {
             Intent i = new Intent(this, NotesActivity.class);
             startActivity(i);
-        }else if(id == R.id.about){
+        } else if (id == R.id.other) {
             fm.beginTransaction().replace(R.id.content_frame, new OtherFragment()).commit();
 
-        }else if(id == R.id.home){
+        } else if (id == R.id.home) {
             fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
+        }else if(id == R.id.resources){
+            fm.beginTransaction().replace(R.id.content_frame, new ResourcesFragment()).commit();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -215,29 +188,5 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
-    private void showPopup(View v) {
-        PopupMenu popup = new PopupMenu(this, v);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.popup_menu, popup.getMenu());
-        popup.show();
-    }
-
-    private void showProgressDialog(){
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage("Logging in, please wait...");
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
-    }
-    private void hideProgressDialog(){
-            if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                mProgressDialog.hide();
-        }
-    }
-
-
-
 }
+

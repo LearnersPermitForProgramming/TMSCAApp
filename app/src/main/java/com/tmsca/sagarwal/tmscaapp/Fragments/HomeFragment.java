@@ -23,10 +23,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.tmsca.sagarwal.tmscaapp.R;
+import com.tmsca.sagarwal.tmscaapp.StartActivity;
 
 public class HomeFragment extends Fragment{
     // Declaring the variables - going to convert to Kotlin soon.
     TextView welcome;
+    Intent i;
 
 
     @Nullable
@@ -39,7 +41,15 @@ public class HomeFragment extends Fragment{
 
         getActivity().setTitle("Pearson Math and Science Team");
 
+
+
         final FirebaseAuth fAuth = FirebaseAuth.getInstance();
+
+        if(fAuth.getCurrentUser() == null){
+               i = new Intent(getActivity(), StartActivity.class);
+               startActivity(i);
+               getActivity().finish();
+        }
         DatabaseReference fNotesDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(fAuth.getCurrentUser().getUid());
         final String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseDatabase.getInstance().getReference().child("Users").child(uid).child("basic").addValueEventListener(new ValueEventListener() {
@@ -59,10 +69,6 @@ public class HomeFragment extends Fragment{
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
-
-
-
 
 
 
