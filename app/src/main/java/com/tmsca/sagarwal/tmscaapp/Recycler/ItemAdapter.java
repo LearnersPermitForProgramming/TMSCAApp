@@ -16,6 +16,8 @@ import com.tmsca.sagarwal.tmscaapp.R;
 import java.util.ArrayList;
 import java.util.List;
 
+//ItemAdapter
+
 public class ItemAdapter extends  RecyclerView.Adapter<ItemAdapter.MyViewHolder>{
     private List<Item> itemsList;
     Intent i;
@@ -38,6 +40,7 @@ public class ItemAdapter extends  RecyclerView.Adapter<ItemAdapter.MyViewHolder>
 
                 @Override
                 public void onClick(View view) {
+                    //Getting the string for recyclerview
                     String recyclerViewTitle = title.getText().toString();
                     if(recyclerViewTitle.equals("Apollo 11")){
 
@@ -68,7 +71,11 @@ public class ItemAdapter extends  RecyclerView.Adapter<ItemAdapter.MyViewHolder>
         Item items = itemsList.get(position);
         holder.title.setText(items.getTitle());
         holder.quality.setText(items.getDescp());
-        Picasso.get().load(items.url).into(holder.image);
+        if(items.url.isEmpty()){
+            items.url = "https://via.placeholder.com/350x150";
+        }else{
+            Picasso.get().load(items.url).into(holder.image);
+        }
     }
 
     @Override

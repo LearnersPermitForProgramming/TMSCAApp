@@ -26,7 +26,6 @@ public class MathFragment extends Fragment{
     private List<Item> itemList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
-    private EditText search;
 
 
     ScaleInAnimationAdapter scaleInAnimationAdapter;

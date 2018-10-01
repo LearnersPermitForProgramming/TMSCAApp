@@ -1,6 +1,8 @@
 package com.tmsca.sagarwal.tmscaapp;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -46,6 +48,14 @@ public class StartActivity extends AppCompatActivity{
             Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
             finish();
+        }
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if(networkInfo != null && networkInfo.isConnected()){
+
+        }else{
+
         }
 
     }

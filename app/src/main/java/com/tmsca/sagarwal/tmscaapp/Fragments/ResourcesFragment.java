@@ -1,5 +1,7 @@
 package com.tmsca.sagarwal.tmscaapp.Fragments;
 
+
+//Imports
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,7 +27,8 @@ public class ResourcesFragment extends Fragment {
     ScaleInAnimationAdapter scaleInAnimationAdapter;
 
 
-    //onCreateView function
+
+    //onCreateView is a function to replace the Fragment on the activity
     
     @Nullable
     @Override
@@ -50,16 +53,13 @@ public class ResourcesFragment extends Fragment {
     }
 
 
+    //Loading items into the RecyclerView
+
     void loadItems(){
         itemList.add(new Item("Dates", "Here you will find upcoming meets and qualifying test dates!", ""));
         itemList.add(new Item("Test Links/Study Links",
                 "Find links to tests and studying links that can help you improve at taking tests for TMSCA!",
                 ""));
         scaleInAnimationAdapter.notifyDataSetChanged();
-
-
-
-
-
     }
 }

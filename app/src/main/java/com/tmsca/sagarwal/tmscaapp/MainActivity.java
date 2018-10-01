@@ -21,6 +21,10 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity
     private DatabaseReference myRef;
     private ProgressDialog mProgressDialog;
     FragmentManager fm;
+    private InterstitialAd mInterstitialAd;
 
     // onCreate method (Does exactly what it sounds like in a programmer mindset)
     @Override
@@ -80,11 +85,33 @@ public class MainActivity extends AppCompatActivity
         Score scoreClass = new Score();
 
         fm = getSupportFragmentManager();
+
+        //AdMob stuff
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mInterstitialAd = new InterstitialAd(MainActivity.this);
+        //ca-app-pub-1595886826370726/4903130403
+        mInterstitialAd.setAdUnitId("ca-app-pub-1595886826370726/4903130403");
+        mInterstitialAd.loadAd(adRequest);
+        mInterstitialAd.setAdListener(new AdListener(){
+            @Override
+            public void onAdLoaded() {
+                displayInterstitalAd();
+            }
+        });
+
+
+
 // ..
 
         fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
 
 
+    }
+
+    private void displayInterstitalAd() {
+        if(mInterstitialAd.isLoaded()){
+            mInterstitialAd.show();
+        }
     }
 
 
@@ -96,44 +123,12 @@ public class MainActivity extends AppCompatActivity
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+
     }
 
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            firebaseAuthWithGoogle(account);
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("AUTH", "signInResult:failed code=" + e.getStatusCode());
-        }
-    }
 
-    // firebaseNumberWithGoogle function ( When the dude clicks the button initiate the sign in stuff)
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d("AUTH", "firebaseAuthWithGoogle:" + acct.getId());
 
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("AUTH", "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            System.out.println(user.getUid() + "Hi Shobhit");
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("AUTH", "signInWithCredential:failure", task.getException());
-
-                        }
-
-                        // ...
-                    }
-                });
-    }
 
 
     public void signOut() {
@@ -150,6 +145,10 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
+
+
+
+    //Navigation Item Selected
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -180,7 +179,11 @@ public class MainActivity extends AppCompatActivity
             fm.beginTransaction().replace(R.id.content_frame, new HomeFragment()).commit();
         }else if(id == R.id.resources){
             fm.beginTransaction().replace(R.id.content_frame, new ResourcesFragment()).commit();
+        }else if(id == R.id.credits){
+            fm.beginTransaction().replace(R.id.content_frame, new CreditsFragment()).commit();
         }
+
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

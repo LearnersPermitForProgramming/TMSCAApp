@@ -35,6 +35,13 @@
             android:label="New/Update Note"/>
         <activity android:name=".user.RegisterActivity"
             android:label="Register"/>
+
+
+
+
+        <meta-data
+                android:name="com.google.android.gms.ads.APPLICATION_ID"
+                android:value="ca-app-pub-1595886826370726/4903130403"/>
     </application>
 
 </manifest>

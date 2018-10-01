@@ -8,6 +8,7 @@ public class Item {
             this.title = title;
             this.descp = descp;
             this.url = url;
+
         }
         public String getTitle() {
             return title;

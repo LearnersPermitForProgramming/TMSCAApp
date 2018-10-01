@@ -28,9 +28,15 @@
                           android:icon="@drawable/science"
                     />
 
+                    <item android:title="Calendar"
+                        android:id="@+id/calendar"
+                        android:icon="@drawable/calendar"
+                        />
+
                     <item
                         android:id="@+id/resources"
-                        android:title="Resources"/>
+                        android:title="Resources"
+                        android:icon="@drawable/resources"/>
 
                 </group>
 
@@ -48,6 +54,9 @@
     <group>
         <item android:title="Other"
               android:id="@+id/other"/>
+        <item android:title="Credits"
+            android:id="@+id/credits"
+            />
     </group>
 
 </menu>
